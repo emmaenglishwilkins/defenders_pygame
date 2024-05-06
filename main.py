@@ -23,12 +23,13 @@ class Game:
         screen.blit(sb, (200, 10))
 
     def gameover(self, screen):
-        gb = myfont.render("Game OVer", 1, (255, 0, 0))
+        gb = myfont.render("Game Over", 1, (255, 0, 0))
         screen.blit(gb, (200, 300))
 def main():
     screen = pygame.display.set_mode((800, 600))
     game = Game(screen)
     xdir = 0
+    bullets = []
 
     while True:
         screen.fill((50, 50, 200))
@@ -38,17 +39,24 @@ def main():
                 quit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    x = 1
+                    xdir = 1
                 elif event.key == pygame.K_LEFT:
-                    x = -1
+                    xdir = -1
+                elif event.key == pygame.K_UP:
+                    bullets.append(game.player.shoot())
             elif event.type == pygame.KEYUP:
                 xdir = 0
 
         if game.lives > 0:
             game.update(xdir)
+
+            for bullet in bullets:
+                bullet.update()
+                bullet.draw(screen)
         else:
             game.gameover(screen)
 
         game.scoreboard(screen)
         pygame.display.update()
+
 main()

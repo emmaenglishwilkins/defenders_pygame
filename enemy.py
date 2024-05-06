@@ -2,8 +2,8 @@ import pygame
 import random
 class Enemy:
     def __init__(self, surface):
-        img = pygame.image.load("")
-        self.img = pygame.transform.scale(100,100)
+        img = pygame.image.load("emma_enemy.png")
+        self.img = pygame.transform.scale(img,(100,100))
         self.rect = self.img.get_rect(center=(350,500))
         self.surface = surface
         self.speed = 1
