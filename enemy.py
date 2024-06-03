@@ -18,3 +18,6 @@ class Enemy:
             game.lives -= 1
             self.rect.y = 0
             self.rect.x = random.randint(0,800)
+    def reset_postion(self):
+        self.rect.y = 0
+        self.rect.x = random.randint(0, 800)

@@ -19,17 +19,31 @@ class Game:
         self.enemy.move(self.player, self)
 
     def scoreboard(self, screen):
-        sb = myfont.render("Score: " + str(self.score) + " Lives: " + str(self.lives), 1, (255, 255,255))
+        sb = myfont.render("Score: " + str(self.score) + " Lives: " + str(self.lives), 1, (255, 255, 255))
         screen.blit(sb, (200, 10))
 
     def gameover(self, screen):
         gb = myfont.render("Game Over", 1, (255, 0, 0))
         screen.blit(gb, (200, 300))
+
+    def update_score(self):
+        self.score += 1
+
+def check_bullet_enemy_collision(bullets, enemy, game, screen):
+    for bullet in bullets:
+        if bullet.rect.colliderect(enemy.rect):
+            bullets.remove(bullet)
+            enemy.reset_postion()
+            game.update_score()
+            break
+
 def main():
     screen = pygame.display.set_mode((800, 600))
     game = Game(screen)
     xdir = 0
     bullets = []
+
+    clock = pygame.time.Clock()
 
     while True:
         screen.fill((50, 50, 200))
@@ -42,10 +56,11 @@ def main():
                     xdir = 1
                 elif event.key == pygame.K_LEFT:
                     xdir = -1
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_SPACE:
                     bullets.append(game.player.shoot())
             elif event.type == pygame.KEYUP:
-                xdir = 0
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                    xdir = 0
 
         if game.lives > 0:
             game.update(xdir)
@@ -53,10 +68,13 @@ def main():
             for bullet in bullets:
                 bullet.update()
                 bullet.draw(screen)
+
+            check_bullet_enemy_collision(bullets, game.enemy, game, screen)
         else:
             game.gameover(screen)
 
         game.scoreboard(screen)
         pygame.display.update()
+        clock.tick(60)  # Limit the frame rate to 60 FPS
 
 main()

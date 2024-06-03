@@ -6,7 +6,7 @@ class Player:
         self.rect = self.img.get_rect(center=(350, 500))
         self.surface = surface
         self.xdir = 0
-        self.speed = 1
+        self.speed = 2
     def draw(self):
         self.surface.blit(self.img, self.rect)
     def move(self, xdir):
